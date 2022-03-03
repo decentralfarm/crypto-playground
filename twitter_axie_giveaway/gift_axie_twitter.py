@@ -11,6 +11,12 @@ import re
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
+# Oauth keys
+consumer_key = "XXX"
+consumer_secret = "XXX"
+access_token = "XXX"
+access_token_secret = "XXX"
+
 logging.basicConfig(filename=config.GIFT_AXIE_LOGS, level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
 # Authentication with Twitter
 client = tweepy.Client(bearer_token = config.BEARER_TOKEN, 
@@ -32,13 +38,15 @@ print(tweet.conversation_id)
 print(tweet.referenced_tweets)
 logging.info("replies:")
 valid_replies =[]
+visited_users = {}
 specific_conversation_query = f'conversation_id:{tweet.conversation_id} to:decentralfarm ronin'
 for reply in tweepy.Paginator(client.search_recent_tweets, query=specific_conversation_query,
                             tweet_fields=['context_annotations', 'created_at', 'conversation_id', 'referenced_tweets', 'in_reply_to_user_id', 'id', 'author_id'], 
                             expansions=["in_reply_to_user_id","referenced_tweets.id", 'author_id'], max_results=100).flatten(limit=1000):
     logging.info(reply)
     print(reply)
-    valid_replies.append(reply)
+    if visited_users.get(reply.author_id, 0) == 0:
+        valid_replies.append(reply)
 print(valid_replies)
 
 
@@ -77,8 +85,8 @@ while len(valid_replies)>0:
         logging.warn(f"The {dest_address} is NOT valid, removing from list")
         valid_replies.remove(selected_winner)
 print(dest_address)
-gift_response = gift.gift(dest_address) #Kick the transfer of a random axie
-logging.info(f"Send gift to {selected_winner.id} address: {dest_address} check: gift_response")
+gift_response = gift.gift(dest_address)
+logging.info(f"Send gift to {selected_winner.id} address: {dest_address} check: {gift_response}")
 
 # Next giveway
 if gift.balance()>0:
