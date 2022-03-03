@@ -77,7 +77,7 @@ while len(valid_replies)>0:
         logging.warn(f"The {dest_address} is NOT valid, removing from list")
         valid_replies.remove(selected_winner)
 print(dest_address)
-#gift_response = gift.gift(dest_address)
+gift_response = gift.gift(dest_address) #Kick the transfer of a random axie
 logging.info(f"Send gift to {selected_winner.id} address: {dest_address} check: gift_response")
 
 # Next giveway
