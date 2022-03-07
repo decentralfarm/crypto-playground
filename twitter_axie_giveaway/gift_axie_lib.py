@@ -2,6 +2,7 @@ import json
 from web3 import Web3
 import config
 import random
+import os
 headers = {
   "Content-Type": "application/json",
   "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36" }
@@ -9,7 +10,10 @@ web3txn = Web3(Web3.HTTPProvider('https://proxy.roninchain.com/free-gas-rpc',
     request_kwargs={ "headers": headers }))
 web3 = Web3(Web3.HTTPProvider('https://api.roninchain.com/rpc', 
     request_kwargs={ "headers": headers }))
-with open("axie_abi.json") as f:
+script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+
+file_path = os.path.join(script_dir, 'axie_abi.json')
+with open(file_path) as f:
     restake_abi = json.load(f)
 contract = web3.eth.contract(address=Web3.toChecksumAddress(
         "0x32950db2a7164ae833121501c797d79e7b79d74c"), abi=restake_abi)
@@ -27,11 +31,11 @@ def balance():
 
 def gift(DESTINATION):
     _to = Web3.toChecksumAddress(DESTINATION.replace("ronin:", "0x"))
-    balance = balance()
-    if balance==0:
+    bal = balance()
+    if bal ==0:
         print("No axies in this account")
         return 'No axies in this account'
-    i = random.randrange(balance)
+    i = random.randrange(bal)
     axieId = contract.functions.tokenOfOwnerByIndex(_from,i).call()
  
     nonce = web3.eth.get_transaction_count(_from)

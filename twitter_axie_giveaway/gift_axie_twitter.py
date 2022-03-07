@@ -25,10 +25,10 @@ consumer_secret=config.API_KEY_SECRET,
 access_token=config.ACCESS_TOKEN,
 access_token_secret=config.ACCESS_TOKEN_SECRET)
 
-query = 'from:decentralfarm #Axie -is:retweet'
+query = 'from:decentralfarm #Axie #DecentFarmGuild #AxieGiveaway -is:retweet'
 
 tweets = client.search_recent_tweets(query=query, tweet_fields=['context_annotations', 'created_at', 'conversation_id', 'referenced_tweets', 'author_id'], max_results=100, expansions=["in_reply_to_user_id","referenced_tweets.id", 'author_id'])
-
+date_giveaway = tweets.data[0].created_at
 tweet = tweets.data[0]
 print(f"Id is {tweet.id}")
 print(tweet)
@@ -42,7 +42,8 @@ visited_users = {}
 specific_conversation_query = f'conversation_id:{tweet.conversation_id} to:decentralfarm ronin'
 for reply in tweepy.Paginator(client.search_recent_tweets, query=specific_conversation_query,
                             tweet_fields=['context_annotations', 'created_at', 'conversation_id', 'referenced_tweets', 'in_reply_to_user_id', 'id', 'author_id'], 
-                            expansions=["in_reply_to_user_id","referenced_tweets.id", 'author_id'], max_results=100).flatten(limit=1000):
+                            expansions=["in_reply_to_user_id","referenced_tweets.id", 'author_id'],
+                            max_results=100).flatten(limit=1000):
     logging.info(reply)
     print(reply)
     if visited_users.get(reply.author_id, 0) == 0:
@@ -73,7 +74,7 @@ dest_address = ''
 selected_winner = None
 while len(valid_replies)>0:
     selected_winner = random.choice(valid_replies)
-    print(selected_winner)
+    print(f"selected: {selected_winner.data}")
 
 
     dest_address = re.findall(r"\bronin:\w+", selected_winner.text)[0]
@@ -85,17 +86,27 @@ while len(valid_replies)>0:
         logging.warn(f"The {dest_address} is NOT valid, removing from list")
         valid_replies.remove(selected_winner)
 print(dest_address)
-gift_response = gift.gift(dest_address)
-logging.info(f"Send gift to {selected_winner.id} address: {dest_address} check: {gift_response}")
+gift_response = ''
+# gift_response = gift.gift(dest_address)
+username=client.get_users(ids=[selected_winner.author_id])
+print(f"username: {username}")
+logging.info(f"Send gift to {selected_winner.author_id}, tweet: {selected_winner.id}  address: {dest_address} check: {gift_response}")
+logging.info(f"The winner is {username.data[0].name}, @{username.data[0].username}, address: {dest_address} check: {gift_response}. Congratulations!!")
 
 # Next giveway
 if gift.balance()>0:
-    print('''
-    #DecentFarmGuild is doing every week an #AxieGiveaway.
+    
+    # If today is Monday (aka 0 of 6), then run the report
+    day = 'Monday'
+    print(date_giveaway)
+    if date_giveaway.weekday() <= 1:
+       day = 'Wednesday' 
+    print(f'''
+    #DecentFarmGuild is doing an #AxieGiveaway every Monday and Wednesday.
 
     What? One Random #Axie from: https://marketplace.axieinfinity.com/profile/ronin:90611514365be717021bff8631abf2e4a7addd8e/axie/
     
-    When? Next Monday.
+    When? Next {day}.
 
     You need to:
     1. Retweet,
