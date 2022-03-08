@@ -87,7 +87,7 @@ while len(valid_replies)>0:
         valid_replies.remove(selected_winner)
 print(dest_address)
 gift_response = ''
-# gift_response = gift.gift(dest_address)
+gift_response = gift.gift(dest_address)
 username=client.get_users(ids=[selected_winner.author_id])
 print(f"username: {username}")
 logging.info(f"Send gift to {selected_winner.author_id}, tweet: {selected_winner.id}  address: {dest_address} check: {gift_response}")
