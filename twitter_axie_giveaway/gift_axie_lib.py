@@ -29,15 +29,19 @@ def validAddr(to):
 def balance():
     return contract.functions.balanceOf(_from).call()
 
-def gift(DESTINATION):
+def gift(DESTINATION, axie_id=None):
     _to = Web3.toChecksumAddress(DESTINATION.replace("ronin:", "0x"))
     bal = balance()
     if bal ==0:
         print("No axies in this account")
         return 'No axies in this account'
-    i = random.randrange(bal)
-    axieId = contract.functions.tokenOfOwnerByIndex(_from,i).call()
- 
+    if axie_id is None:
+    
+        i = random.randrange(bal)
+        axieId = contract.functions.tokenOfOwnerByIndex(_from,i).call()
+    else:
+        axieId = int(axie_id)
+    
     nonce = web3.eth.get_transaction_count(_from)
     transfer_txn = contract.functions.safeTransferFrom(_from ,_to, axieId).buildTransaction({
         'chainId': 2020,
