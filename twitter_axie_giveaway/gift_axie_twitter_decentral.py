@@ -44,7 +44,6 @@ valid_replies =[]
 visited_users = {}
 media = {}
 specific_conversation_query = f'conversation_id:{tweet.conversation_id} to:decentralfarm ronin'
-# specific_conversation_query = f'from:decentraland Join the monthly Town Hall meetups'
 for reply in tweepy.Paginator(client.search_recent_tweets, query=specific_conversation_query,
                             tweet_fields=['context_annotations', 'created_at', 'conversation_id', 'referenced_tweets', 'in_reply_to_user_id', 'id', 'author_id'], 
                             expansions=["in_reply_to_user_id","referenced_tweets.id", 'author_id', 'attachments.media_keys'],
@@ -131,7 +130,7 @@ while len(valid_replies)>0:
 if len(valid_replies)>0:
     print(dest_address)
     gift_response = ''
-    #gift_response = gift.gift(dest_address, desired_axie)
+    gift_response = gift.gift(dest_address, desired_axie)
     username=client.get_users(ids=[selected_winner.author_id])
     print(f"username: {username}")
     logging.info(f"Send gift to {selected_winner.author_id}, tweet: {selected_winner.id}  address: {dest_address} check: {gift_response}")
