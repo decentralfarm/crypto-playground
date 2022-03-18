@@ -59,12 +59,12 @@ for reply in tweepy.Paginator(client.search_recent_tweets, query=specific_conver
         if visited_users.get(in_rep.author_id, 0) == 0:
             visited_users[in_rep.author_id] = 1
             valid_replies.append(in_rep)
+    if 'media' in reply.includes:
+        for inc_re in reply.includes['media']:
 
-    for inc_re in reply.includes['media']:
-
-        logging.info(inc_re)
-        print(inc_re.data)
-        media[inc_re.media_key] = inc_re.data
+            logging.info(inc_re)
+            print(inc_re.data)
+            media[inc_re.media_key] = inc_re.data
 
 print(media)
 
@@ -99,10 +99,10 @@ for potential_winner  in valid_replies:
     lst_addr=re.findall(r"\bronin:\w+", potential_winner.text)
     if len(lst_addr) > 0:
         dest_address = lst_addr[0]
-    lst_axies=re.findall(r"\baxie\s*=\s*([0-9]+)", potential_winner.text)
+    lst_axies=re.findall(r"\baxie\s*=\s*([0-9]+)", potential_winner.text, re.IGNORECASE)
     if len(lst_axies) > 0:
         desired_axie = lst_axies[0]
-    lst_polygon=re.findall(r"\bpolygon\s*=\s*([0-9]+)", potential_winner.text)
+    lst_polygon=re.findall(r"\bpolygon\s*=\s*(\w+)", potential_winner.text, re.IGNORECASE)
     polygon_address = None
     if len(lst_polygon) > 0:
         polygon_address = lst_polygon[0]
