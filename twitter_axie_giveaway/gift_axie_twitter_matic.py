@@ -91,6 +91,8 @@ def isValid(author_id):
 dest_address = ''
 desired_axie = None
 paid_replies =[]
+dest_addr_dict = {}
+desire_axie_dict = {}
 
 for potential_winner  in valid_replies:
     
@@ -114,18 +116,22 @@ for potential_winner  in valid_replies:
         gift_mat_response = gift_mat.gift(polygon_address, 0.01)
         logging.info(f"Send MATIC to {potential_winner.author_id}, tweet: {potential_winner.id}  address: {polygon_address} check: {gift_mat_response}")
         paid_replies.append(potential_winner)
+        desire_axie_dict[potential_winner.author_id] = dest_address
+        desire_axie_dict[potential_winner.author_id] = desired_axie
     else:
         logging.warning(f"The {dest_address} is NOT valid, removing from list")
 
 if len(paid_replies)>0:
     winner = random.choice(paid_replies)
-    print(dest_address)
+    win_addr = dest_addr_dict.get(winner.author_id)
+    print(win_addr)
+    des_axie = desire_axie_dict.get(winner.author_id)
     gift_response = ''
-    gift_response = gift.gift(dest_address, desired_axie)
+    gift_response = gift.gift(win_addr, des_axie)
     username=client.get_users(ids=[winner.author_id])
     print(f"username: {username}")
-    logging.info(f"Send gift to {winner.author_id}, tweet: {winner.id}  address: {dest_address} check: {gift_response}")
-    logging.info(f"The winner is {username.data[0].name}, @{username.data[0].username}, address: {dest_address} check: {gift_response}. Congratulations!!")
+    logging.info(f"Send gift to {winner.author_id}, tweet: {winner.id}  address: {win_addr} check: {gift_response}")
+    logging.info(f"The winner is {username.data[0].name}, @{username.data[0].username}, address: {win_addr} check: {gift_response}. Congratulations!!")
 else:
     logging.info(f"No winner!!")
 
