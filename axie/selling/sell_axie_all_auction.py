@@ -15,13 +15,14 @@ axie_token_addr = Web3.toChecksumAddress(
 weth_token_addr = Web3.toChecksumAddress(
     "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5")
 contract = web3.eth.contract(address=axie_token_addr, abi=restake_abi)
+
+_from =Web3.toChecksumAddress(config.STAKE_ACCOUNT_ADDRESS.replace("ronin:", "0x"))
+balance = contract.functions.balanceOf(_from).call()
+
 with open("../common/axie_market_abi.json") as f:
     market_abi = json.load(f)
 market_contract = web3.eth.contract(address=Web3.toChecksumAddress(
     "0x213073989821f738a7ba3520c3d31a1f9ad31bbd"), abi=market_abi)
-
-_from =Web3.toChecksumAddress(config.STAKE_ACCOUNT_ADDRESS.replace("ronin:", "0x"))
-balance = contract.functions.balanceOf(_from).call()
 
 the_lapse = 2*86400     #two days
 start_p = web3.toWei('0.007', 'ether')
