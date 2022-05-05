@@ -40,4 +40,84 @@
 	"outputs": [],
 	"stateMutability": "nonpayable",
 	"type": "function"
+},
+{
+	"anonymous": false,
+	"inputs": [
+		{
+			"indexed": false,
+			"internalType": "address",
+			"name": "_seller",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "_listingIndex",
+			"type": "uint256"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256[]",
+			"name": "_startingPrices",
+			"type": "uint256[]"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256[]",
+			"name": "_endingPrices",
+			"type": "uint256[]"
+		},
+		{
+			"indexed": false,
+			"internalType": "address[]",
+			"name": "_exchangeTokens",
+			"type": "address[]"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256[]",
+			"name": "_durations",
+			"type": "uint256[]"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "_startingTimestamps",
+			"type": "uint256"
+		}
+	],
+	"name": "AuctionCreated",
+	"type": "event"
+},{
+	"inputs": [
+		
+        {
+			"internalType": "uint256",
+			"name": "_listingIndex",
+			"type": "uint256"
+		}
+	],
+	"name": "cancelAuction",
+	"outputs": [],
+	"stateMutability": "nonpayable",
+	"type": "function"
+},{
+	"anonymous": false,
+	"inputs": [
+		{
+			"indexed": false,
+			"internalType": "address",
+			"name": "_seller",
+			"type": "address"
+		},
+		{
+			"indexed": false,
+			"internalType": "uint256",
+			"name": "_listingIndex",
+			"type": "uint256"
+		}
+	],
+	"name": "AuctionCancelled",
+	"type": "event"
 }]
