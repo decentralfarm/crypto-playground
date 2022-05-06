@@ -55,6 +55,9 @@ for i in range(balance):
         private_key = bytearray.fromhex(config.STAKE_PK.replace("0x", "")))
     rawTxn = signed_txn.rawTransaction
     tx_hash=web3.eth.send_raw_transaction(rawTxn)
-    web3.eth.wait_for_transaction_receipt(tx_hash)
+    tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
+    processed_receipt = market_contract.events.AuctionCreated().processReceipt(tx_receipt)
+    if processed_receipt!=None:
+        print(processed_receipt[0]['args'])
     print(f'Check: https://explorer.roninchain.com/tx/{web3.toHex(web3.keccak(rawTxn))}')
     time.sleep(1)
