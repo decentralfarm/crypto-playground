@@ -9,7 +9,7 @@ data['MA200'] = talib.SMA(data.Close, 200)
 
 fig = make_subplots(specs=[[{"secondary_y": True}]]) 
 
-fig.add_trace(go.Candlestick(
+fig.add_trace(go.Candlestick(        x=data.index,
                                      open=data.Open, 
                                      high=data.High,
                                      low=data.Low,
@@ -18,14 +18,20 @@ fig.add_trace(go.Candlestick(
                 secondary_y=True)
 
 
-fig.add_trace(go.Scatter(   y=data.MA200, 
+fig.add_trace(go.Scatter(   x=data.index,
+                            y=data.MA200, 
                             line=dict(color='magenta', width=1), 
                             name="Moving Average 200"
                         ),
                  secondary_y=True
             )
 
-fig.add_trace(go.Bar(y=data.Volume, name="Volume"),  secondary_y=False)
+fig.add_trace(go.Bar(   x=data.index, 
+                        y=data.Volume, 
+                        name="Volume"
+                    ),  
+                secondary_y=False
+            )
 
 fig.layout.yaxis2.showgrid=False
 fig.show()

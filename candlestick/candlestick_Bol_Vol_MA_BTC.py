@@ -9,7 +9,7 @@ data['MA200'] = talib.SMA(data.Close, 200)
 
 fig = make_subplots(specs=[[{"secondary_y": True}]]) 
 
-fig.add_trace(go.Candlestick(
+fig.add_trace(go.Candlestick(        x=data.index,
                                      open=data.Open, 
                                      high=data.High,
                                      low=data.Low,
@@ -18,25 +18,33 @@ fig.add_trace(go.Candlestick(
                 secondary_y=True)
 
 
-fig.add_trace(go.Scatter(   y=data.MA200, 
+fig.add_trace(go.Scatter(   x=data.index,
+                            y=data.MA200, 
                             line=dict(color='magenta', width=1), 
                             name="Moving Average 200"
                         ),
                  secondary_y=True
             )
 
-fig.add_trace(go.Bar(y=data.Volume, name="Volume"),  secondary_y=False)
+fig.add_trace(go.Bar(   x=data.index,
+                        y=data.Volume, 
+                        name="Volume"
+                    ),  
+                secondary_y=False
+            )
 
 up, mid, low = talib.BBANDS(data.Close)
 
-fig.add_trace(go.Scatter(   y=up,
+fig.add_trace(go.Scatter(   x=data.index,
+                            y=up,
                             line=dict(color='orange', width=1),
                             name="Up"
                         ),
                 secondary_y=True
             )
 
-fig.add_trace(go.Scatter(   y=low,
+fig.add_trace(go.Scatter(   x=data.index,
+                            y=low,
                             line=dict(color='pink', width=1),
                             name="Low"
                         ),
